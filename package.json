@@ -1,0 +1,8 @@
+{
+  "name": "react-webpack-test",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "index.js",
+  "author": "Brian",
+  "license": "MIT"
+}
