@@ -14,22 +14,36 @@ process.on('unhandledRejection', err => {
 // Ensure environment variables are read.
 require('../config/env');
 
-const path = require('path');
 const paths = require('../config/paths');
 const fs = require('fs-extra');
 const webpack = require('webpack');
-const config = require('../config/webpack.config');
+const configFactory = require('../config/webpack.config');
 
 fs.emptyDirSync(paths.appBuild);
 copyPublicFolder();
+
+const config = configFactory('production');
 let compiler = webpack(config);
-compiler.run((err, stats) => {
-  console.log('done');
+build().then(() => {
+    console.log('finished');
 });
 
 function copyPublicFolder() {
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
     filter: file => file !== paths.appHtml
+  });
+}
+
+function build() {
+  return new Promise((resolve, reject) => {
+    compiler.run((err, stats) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      } else {
+        return resolve();
+      }
+    });
   });
 }
