@@ -22,7 +22,8 @@ const configFactory = require('../config/webpack.config');
 fs.emptyDirSync(paths.appBuild);
 copyPublicFolder();
 
-const config = configFactory('production');
+const config = require('../config/webpack.prod.js');
+
 let compiler = webpack(config);
 build().then(() => {
     console.log('finished');

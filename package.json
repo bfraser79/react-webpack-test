@@ -22,7 +22,8 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
   },
   "dependencies": {
     "react": "^16.8.1",
@@ -30,6 +31,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open --config config/webpack.config.js",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "build2": "webpack --config config/webpack.prod.js"
   }
 }
