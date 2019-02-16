@@ -19,7 +19,18 @@ module.exports = {
         path: paths.appBuild
     },
     resolve: {
-        extensions: ['.js', '.jsx']
+        extensions: ['.web.mjs',
+            '.mjs',
+            '.web.js',
+            '.js',
+            '.web.ts',
+            '.ts',
+            '.web.tsx',
+            '.tsx',
+            '.json',
+            '.web.jsx',
+            '.jsx',
+        ]
     },
     plugins: [htmlWebPackPlugin],
     module: {
