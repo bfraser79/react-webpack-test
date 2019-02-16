@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const paths = require('./paths');
 const common = require('./webpack.common');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const safePostCssParser = require('postcss-safe-parser');
@@ -13,16 +14,27 @@ const htmlWebPackPlugin = new HtmlWebPackPlugin({
     title: 'Development'
 });
 
+const publicPath = '/';
+
 module.exports = merge(common, {
     mode: 'development',
-    plugins: [htmlWebPackPlugin, new CaseSensitivePathsPlugin()],
+    plugins: [htmlWebPackPlugin,
+        new CaseSensitivePathsPlugin(),
+        // Generate a manifest file which contains a mapping of all asset filenames
+        // to their corresponding output file so that tools can pick it up without
+        // having to parse `index.html`.
+        // new ManifestPlugin({
+        //     fileName: 'asset-manifest.json',
+        //     publicPath: publicPath,
+        // })
+    ],
     devtool: 'inline-source-map',
     output: {
         pathinfo: true,
         path: undefined,
         filename: 'static/js/bundle.js',
         chunkFilename: 'static/js/[name].chunk.js',
-        publicPath: '/',
+        publicPath: publicPath,
         //  devtoolModuleFilenameTemplate
     },
     optimization: {

@@ -1,11 +1,14 @@
 const merge = require('webpack-merge');
 const paths = require('./paths');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const common = require('./webpack.common');
 const safePostCssParser = require('postcss-safe-parser');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+const publicPath = '/';
 
 const htmlWebPackPlugin = new HtmlWebPackPlugin({
     template: './public/index.html',
@@ -22,7 +25,16 @@ const miniCssWebPackPlugin = new MiniCssExtractPlugin({
 
 module.exports = merge(common, {
     mode: 'production',
-    plugins: [htmlWebPackPlugin, miniCssWebPackPlugin],
+    plugins: [htmlWebPackPlugin,
+        miniCssWebPackPlugin,
+        // Generate a manifest file which contains a mapping of all asset filenames
+        // to their corresponding output file so that tools can pick it up without
+        // having to parse `index.html`.
+        new ManifestPlugin({
+            fileName: 'asset-manifest.json',
+            publicPath: publicPath,
+        })
+    ],
     optimization: {
         minimize: true,
         minimizer: [
@@ -171,7 +183,7 @@ module.exports = merge(common, {
                     use: [{
                             loader: MiniCssExtractPlugin.loader,
                             options: {
-                                publicPath: './'
+                                publicPath: publicPath
                             }
                         },
                         {
