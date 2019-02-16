@@ -1,9 +1,12 @@
 const merge = require('webpack-merge');
 const paths = require('./paths');
 const common = require('./webpack.common');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+
 
 module.exports = merge(common, {
     mode: 'development',
+    plugins: [new CaseSensitivePathsPlugin()],
     devtool: 'inline-source-map',
     devServer: {
         contentBase: './build'
