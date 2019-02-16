@@ -1,14 +1,9 @@
 const path = require('path');
-const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const paths = require('./paths');
 
-const htmlWebPackPlugin = new HtmlWebPackPlugin({
-    template: './public/index.html',
-    filename: './index.html',
-    title: 'Production'
-});
+
 
 const forkTsCheckerWebpackPlugin = new ForkTsCheckerWebpackPlugin({
     async: false,
@@ -56,7 +51,7 @@ module.exports = {
             '.jsx',
         ]
     },
-    plugins: [htmlWebPackPlugin, forkTsCheckerWebpackPlugin],
+    plugins: [forkTsCheckerWebpackPlugin],
     module: {
         rules: [
             // Disable require.ensure as it's not a standard language feature.

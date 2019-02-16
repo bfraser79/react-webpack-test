@@ -26,11 +26,14 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.5.0",
+    "postcss-safe-parser": "^4.0.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "terser-webpack-plugin": "^1.2.2",
     "typescript": "^3.3.3",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
@@ -49,10 +52,10 @@
     "not op_mini all"
   ],
   "scripts": {
-    "startx": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "build2": "webpack --config config/webpack.prod.js",
+    "start": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
+    "startx": "node scripts/start.js",
+    "buildx": "node scripts/build.js",
+    "build": "webpack --config config/webpack.prod.js",
     "build3": "webpack"
   }
 }
