@@ -36,6 +36,12 @@
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "scripts": {
     "start": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
     "build": "node scripts/build.js",

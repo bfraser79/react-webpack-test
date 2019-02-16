@@ -64,7 +64,7 @@ const htmlWebPackPlugin = new HtmlWebPackPlugin({
 
 module.exports = {
     entry: [
-        './src/index.jsx'
+        './src/index.tsx'
     ],
     output: {
         path: paths.appBuild
