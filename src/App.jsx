@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 // import CounterContainer from './Components/Counter-Container';
 // import store from './store';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 
 class App extends Component {
   render() {

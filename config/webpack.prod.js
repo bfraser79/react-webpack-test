@@ -112,7 +112,7 @@ module.exports = merge(common, {
                                 sourceMap: true
                             }
                         }
-                    ],
+                    ]
                 },
                 // Opt-in support for SASS (using .scss or .sass extensions).
                 // By default we support SASS Modules with the
@@ -120,7 +120,20 @@ module.exports = merge(common, {
                 {
                     test: /\.(scss|sass)$/,
                     exclude: /\.module\.(scss|sass)$/,
-                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                    use: [{
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                publicPath: './'
+                            }
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                importLoaders: 2,
+                                sourceMap: true
+                            }
+                        }, 'sass-loader'
+                    ],
                     // Don't consider CSS imports dead code even if the
                     // containing package claims to have no side effects.
                     // Remove this when webpack adds a warning or an error for this.
@@ -131,7 +144,20 @@ module.exports = merge(common, {
                 //         // // using the extension .module.scss or .module.sass
                 {
                     test: /\.module\.(scss|sass)$/,
-                    use: ['style-loader', 'css-loader', 'sass-loader'],
+                    use: [{
+                            loader: MiniCssExtractPlugin.loader,
+                            options: {
+                                publicPath: './'
+                            }
+                        },
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                importLoaders: 2,
+                                sourceMap: true
+                            }
+                        }, 'sass-loader'
+                    ]
                 },
                 // "file" loader makes sure those assets get served by WebpackDevServer.
                 // When you `import` an asset, you get its (virtual) filename.
