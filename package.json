@@ -10,6 +10,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@types/node": "^11.9.3",
     "babel-loader": "^8.0.5",
     "babel-plugin-named-asset-import": "^0.3.0",
     "css-loader": "^2.1.0",
@@ -17,8 +18,13 @@
     "dotenv-expand": "^4.2.0",
     "eslint": "^5.13.0",
     "eslint-loader": "^2.1.2",
+    "file-loader": "^3.0.1",
     "fs-extra": "^7.0.1",
     "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.5.0",
+    "postcss-flexbugs-fixes": "^4.1.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
@@ -26,12 +32,14 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "postcss-preset-env": "^6.5.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --config config/webpack.config.js",
+    "start": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
     "build": "node scripts/build.js",
-    "build2": "webpack --config config/webpack.prod.js"
+    "build2": "webpack --config config/webpack.prod.js",
+    "build3": "webpack"
   }
 }

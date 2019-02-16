@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const paths = require('./paths');
 
 const htmlWebPackPlugin = new HtmlWebPackPlugin({
@@ -8,12 +9,68 @@ const htmlWebPackPlugin = new HtmlWebPackPlugin({
     title: 'Production'
 });
 
+// const isEnvProduction = true;
+// const isEnvDevelopment = false;
+// const shouldUseSourceMap = true;
+// const shouldUseRelativeAssetPaths = false;
+
+// common function to get style loaders
+// const getStyleLoaders = (cssOptions, preProcessor) => {
+//     const loaders = [
+//       isEnvDevelopment && require.resolve('style-loader'),
+//       isEnvProduction && {
+//         loader: MiniCssExtractPlugin.loader,
+//         options: Object.assign(
+//           {},
+//           shouldUseRelativeAssetPaths ? { publicPath: '../../' } : undefined
+//         ),
+//       },
+//       {
+//         loader: require.resolve('css-loader'),
+//         options: cssOptions,
+//       },
+//       {
+//         // Options for PostCSS as we reference these options twice
+//         // Adds vendor prefixing based on your specified browser support in
+//         // package.json
+//         loader: require.resolve('postcss-loader'),
+//         options: {
+//           // Necessary for external CSS imports to work
+//           // https://github.com/facebook/create-react-app/issues/2677
+//           ident: 'postcss',
+//           plugins: () => [
+//             require('postcss-flexbugs-fixes'),
+//             require('postcss-preset-env')({
+//               autoprefixer: {
+//                 flexbox: 'no-2009',
+//               },
+//               stage: 3,
+//             }),
+//           ],
+//           sourceMap: isEnvProduction && shouldUseSourceMap,
+//         },
+//       },
+//     ].filter(Boolean);
+//     if (preProcessor) {
+//       loaders.push({
+//         loader: require.resolve(preProcessor),
+//         options: {
+//           sourceMap: isEnvProduction && shouldUseSourceMap,
+//         },
+//       });
+//     }
+//     return loaders;
+//   };
+
 module.exports = {
     entry: [
-        './src/index.tsx'
+        './src/index.jsx'
     ],
     output: {
         path: paths.appBuild
+    },
+    resolve: {
+        extensions: ['.js', '.jsx']
     },
     plugins: [htmlWebPackPlugin],
     module: {
@@ -24,20 +81,25 @@ module.exports = {
                     requireEnsure: false
                 }
             },
-
             // First, run the linter.
             // It's important to do this before Babel processes the JS.
             {
                 test: /\.(js|mjs|jsx)$/,
                 enforce: 'pre',
                 use: [{
-                    options: {
-                        eslintPath: require.resolve('eslint')
-                    },
-                    loader: require.resolve('eslint-loader')
+                    loader: 'eslint-loader'
                 }],
                 include: paths.appSrc
             },
+            {
+                test: /\.(js|mjs|jsx)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                }
+            },
+
+
             {
                 oneOf: [
                     // Process application JS with Babel.
@@ -45,11 +107,11 @@ module.exports = {
                     {
                         test: /\.(js|mjs|jsx|ts|tsx)$/,
                         include: paths.appSrc,
-                        loader: require.resolve('babel-loader'),
+                        loader: 'babel-loader',
                         options: {
                             plugins: [
                                 [
-                                    require.resolve('babel-plugin-named-asset-import'),
+                                    'babel-plugin-named-asset-import',
                                     {
                                         loaderMap: {
                                             svg: {
@@ -67,6 +129,89 @@ module.exports = {
                             compact: false
                         }
                     },
+                    // Process any JS outside of the app with Babel.
+                    // Unlike the application JS, we only compile the standard ES features.
+
+                    {
+                        test: /\.(js|mjs)$/,
+                        exclude: /@babel(?:\/|\\{1,2})runtime/,
+                        loader: 'babel-loader',
+                        options: {
+                            babelrc: false,
+                            configFile: false,
+                            compact: false,
+                            //presets: [require('@babel/preset-env').default],
+                            cacheDirectory: true,
+                            cacheCompression: false,
+
+                            // If an error happens in a package, it's possible to be
+                            // because it was compiled. Thus, we don't want the browser
+                            // debugger to show the original code. Instead, the code
+                            // being evaluated would be much more helpful.
+                            sourceMaps: false,
+                        },
+                    },
+
+                    // "postcss" loader applies autoprefixer to our CSS.
+                    // "css" loader resolves paths in CSS and adds assets as dependencies.
+                    // "style" loader turns CSS into JS modules that inject <style> tags.
+                    // In production, we use MiniCSSExtractPlugin to extract that CSS
+                    // to a file, but in development "style" loader enables hot editing
+                    // of CSS.
+                    // By default we support CSS Modules with the extension .module.css
+                    {
+                        test: /\.css$/,
+                        exclude: /\.module\.css$/,
+                        use: ['style-loader', 'css-loader'],
+                        // Don't consider CSS imports dead code even if the
+                        // containing package claims to have no side effects.
+                        // Remove this when webpack adds a warning or an error for this.
+                        // See https://github.com/webpack/webpack/issues/6571
+                        sideEffects: true,
+                    },
+                    // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
+                    // using the extension .module.css
+                    {
+                        test: /\.module\.css$/,
+                        use: ['style-loader', 'css-loader', 'sass-loader'],
+                    },
+                    // Opt-in support for SASS (using .scss or .sass extensions).
+                    // By default we support SASS Modules with the
+                    // extensions .module.scss or .module.sass
+                    {
+                        test: /\.(scss|sass)$/,
+                        exclude: /\.module\.(scss|sass)$/,
+                        use: ['style-loader', 'css-loader', 'sass-loader'],
+                        // Don't consider CSS imports dead code even if the
+                        // containing package claims to have no side effects.
+                        // Remove this when webpack adds a warning or an error for this.
+                        // See https://github.com/webpack/webpack/issues/6571
+                        sideEffects: true,
+                    },
+                    //         // // Adds support for CSS Modules, but using SASS
+                    //         // // using the extension .module.scss or .module.sass
+                    {
+                        test: /\.module\.(scss|sass)$/,
+                        use: ['style-loader', 'css-loader', 'sass-loader'],
+                    },
+                    // "file" loader makes sure those assets get served by WebpackDevServer.
+                    // When you `import` an asset, you get its (virtual) filename.
+                    // In production, they would get copied to the `build` folder.
+                    // This loader doesn't use a "test" so it will catch all modules
+                    // that fall through the other loaders.
+                    {
+                        loader: 'file-loader',
+                        // Exclude `js` files to keep "css" loader working as it injects
+                        // its runtime that would otherwise be processed through "file" loader.
+                        // Also exclude `html` and `json` extensions so they get processed
+                        // by webpacks internal loaders.
+                        exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+                        options: {
+                            name: 'static/media/[name].[hash:8].[ext]',
+                        },
+                    }
+                    // ** STOP ** Are you adding a new loader?
+                    // Make sure to add the new loader(s) before the "file" loader.
                 ]
             }
         ]

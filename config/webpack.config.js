@@ -12,7 +12,7 @@ module.exports = function(env) {
       path: paths.appBuild
     },
     entry:[
-      './src/index.tsx'
+      './src/index.jsx'
     ],
     module: {
       rules: [
