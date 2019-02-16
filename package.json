@@ -11,6 +11,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
     "@types/node": "^11.9.3",
+    "add": "^2.0.6",
     "babel-loader": "^8.0.5",
     "babel-plugin-named-asset-import": "^0.3.0",
     "css-loader": "^2.1.0",
@@ -19,21 +20,24 @@
     "eslint": "^5.13.0",
     "eslint-loader": "^2.1.2",
     "file-loader": "^3.0.1",
+    "fork-ts-checker-webpack-plugin": "^0.5.2",
     "fs-extra": "^7.0.1",
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
+    "node-sass": "^4.11.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
+    "postcss-preset-env": "^6.5.0",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "typescript": "^3.3.3",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "yarn": "^1.13.0"
   },
   "dependencies": {
-    "node-sass": "^4.11.0",
-    "postcss-preset-env": "^6.5.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1"
   },
@@ -44,7 +48,8 @@
     "not op_mini all"
   ],
   "scripts": {
-    "start": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
+    "startx": "webpack-dev-server --mode development --open --config config/webpack.dev.js",
+    "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "build2": "webpack --config config/webpack.prod.js",
     "build3": "webpack"

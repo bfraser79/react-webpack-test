@@ -17,30 +17,29 @@ require('../config/env');
 const webpackDevServer = require('webpack-dev-server');
 const paths = require('../config/paths');
 const webpack = require('webpack');
-const configFactory = require('../config/webpack.config');
-const createDevServerConfig = require('../config/webpackDevServer.config');
+const devServerConfig = require('../config/webpackDevServer.config');
 
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
 
-const config = configFactory('development');
+const config = require('../config/webpack.dev.js');
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const appName = require(paths.appPackageJson).name;
 
-const serverConfig = createDevServerConfig(proxyConfig, lanUrlForConfig);
+//const serverConfig = devServerConfig(proxyConfig, lanUrlForConfig);
 
 let compiler = webpack(config);
-const devServer = new webpackDevServer(compiler, serverConfig);
+const devServer = new webpackDevServer(compiler);
 
 // Launch WebpackDevServer.
-devServer.listen(port, HOST, err => {
+devServer.listen(DEFAULT_PORT, HOST, err => {
     if (err) {
       return console.log(err);
     }
-    if (isInteractive) {
-      clearConsole();
-    }
-    console.log(chalk.cyan('Starting the development server...\n'));
-    openBrowser(urls.localUrlForBrowser);
+    // if (isInteractive) {
+    //   clearConsole();
+    // }
+    console.log('Starting the development server...\n');
+   // openBrowser(urls.localUrlForBrowser);
   });
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const paths = require('./paths');
 
 const htmlWebPackPlugin = new HtmlWebPackPlugin({
@@ -9,6 +10,29 @@ const htmlWebPackPlugin = new HtmlWebPackPlugin({
     title: 'Production'
 });
 
+const forkTsCheckerWebpackPlugin = new ForkTsCheckerWebpackPlugin({
+    async: false,
+    checkSyntacticErrors: true,
+    tsconfig: paths.appTsConfig,
+    compilerOptions: {
+      module: 'esnext',
+      moduleResolution: 'node',
+      resolveJsonModule: true,
+      isolatedModules: true,
+      noEmit: true,
+      jsx: 'preserve',
+    },
+    reportFiles: [
+      '**',
+      '!**/*.json',
+      '!**/__tests__/**',
+      '!**/?(*.)(spec|test).*',
+      '!**/src/setupProxy.*',
+      '!**/src/setupTests.*',
+    ],
+    watch: paths.appSrc,
+    silent: true
+  })
 
 
 module.exports = {
@@ -32,7 +56,7 @@ module.exports = {
             '.jsx',
         ]
     },
-    plugins: [htmlWebPackPlugin],
+    plugins: [htmlWebPackPlugin, forkTsCheckerWebpackPlugin],
     module: {
         rules: [
             // Disable require.ensure as it's not a standard language feature.

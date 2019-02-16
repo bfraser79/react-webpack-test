@@ -17,7 +17,6 @@ require('../config/env');
 const paths = require('../config/paths');
 const fs = require('fs-extra');
 const webpack = require('webpack');
-const configFactory = require('../config/webpack.config');
 
 fs.emptyDirSync(paths.appBuild);
 copyPublicFolder();
@@ -25,8 +24,10 @@ copyPublicFolder();
 const config = require('../config/webpack.prod.js');
 
 let compiler = webpack(config);
-build().then(() => {
-    console.log('finished');
+
+build().then((msg) => {
+  console.log(msg);
+  console.log('finished');
 });
 
 function copyPublicFolder() {
@@ -39,11 +40,17 @@ function copyPublicFolder() {
 function build() {
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
+      let messages;
+
       if (err) {
-        console.log(err);
-        return reject(err);
+        if (!err.message) {
+          return reject(err);
+        } else {
+          return reject(err.message);
+        }
       } else {
-        return resolve();
+        messages = stats.toJson({ all: false, warnings: true, errors: true });
+        return resolve(messages);
       }
     });
   });
